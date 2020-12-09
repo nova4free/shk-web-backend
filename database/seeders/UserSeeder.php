@@ -16,14 +16,15 @@ class UserSeeder extends Seeder
     public function run()
     {
         $users = collect([
-            ['name' => 'hanan', 'email' => 'hasyrawi@gmail.com'],
-            ['name' => 'salman', 'email' => 'salmankarsa@gmail.com']
+            ['name' => 'hanan', 'email' => 'hasyrawi@gmail.com', 'role' => 'admin'],
+            ['name' => 'salman', 'email' => 'salmankarsa@gmail.com', 'role' => 'admin']
         ]);
 
         $users->each(function ($user) {
             User::factory()->create([
                 'name'  => $user['name'],
                 'email' => $user['email'],
+                'role'  => $user['role'],
             ]);
         });
     }

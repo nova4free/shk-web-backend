@@ -3,6 +3,8 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -21,7 +23,7 @@ class GasStation extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -30,7 +32,15 @@ class GasStation extends Resource
      */
     public static $search = [
         'id',
+        'name',
     ];
+
+    public static function indexQuery(NovaRequest $request, $query)
+    {   
+        $user = auth()->user()->id;
+        
+        return $query->where('user_id' , $user);
+    }
 
     /**
      * Get the fields displayed by the resource.
@@ -43,11 +53,15 @@ class GasStation extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
 
-            Text::make(__('Name'), 'name')
+            BelongsTo::make('Manager' , 'user' , User::class),
+
+            Text::make(__('Nama SPBU'), 'name')
                 ->rules('required', 'string'),
 
-            Text::make(__('NO Station'), 'no_station')
+            Text::make(__('NO SPBU'), 'no_station')
                 ->rules('required', 'string'),
+
+            HasMany::make('Product' , 'product' , Product::class),  
         ];
     }
 

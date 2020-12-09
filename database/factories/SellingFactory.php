@@ -2,18 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\GasStation;
-use App\Models\User;
+use App\Models\Selling;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class GasStationFactory extends Factory
+class SellingFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = GasStation::class;
+    protected $model = Selling::class;
 
     /**
      * Define the model's default state.
@@ -23,9 +22,7 @@ class GasStationFactory extends Factory
     public function definition()
     {
         return [
-            'user_id'       => User::factory()->create()->id,
-            'name'          => $this->faker->name,
-            'no_station'    => rand(100, 200),
+            //
         ];
     }
 }

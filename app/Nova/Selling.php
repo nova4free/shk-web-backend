@@ -4,29 +4,28 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Gravatar;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\HasOne;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Password;
-use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use PhpParser\Node\Expr\FuncCall;
 
-class User extends Resource
+class Selling extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\User::class;
+    public static $model = \App\Models\Selling::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'date';
 
     /**
      * The columns that should be searched.
@@ -34,8 +33,15 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id',
+        'date',
     ];
+
+
+    public static function relatableQuery(NovaRequest $request, $query)
+    {
+        return $query;
+    }
 
     /**
      * Get the fields displayed by the resource.
@@ -46,30 +52,19 @@ class User extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make()->sortable(),
+            ID::make(__('ID'), 'id')->sortable(),
 
-            Gravatar::make()->maxWidth(50),
+            BelongsTo::make('Products', 'product', Product::class),
 
-            Text::make('Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
+            Date::make('Tanggal', 'date')
+                ->rules('required', 'string'),
 
-            Text::make('Email')
-                ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
+            Number::make('Liter', 'ltr')
+                ->rules('required', 'alpha_num'),
 
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', 'string', 'min:8')
-                ->updateRules('nullable', 'string', 'min:8'),
-
-            Select::make('Roles', 'role')
-                ->options([
-                    'admin'   => 'admin',
-                    'manager' => 'manager'
-                ]),
+            Text::make('Total Rp', function () {
+                return $this->product->price * $this->ltr;
+            }),
 
         ];
     }
@@ -116,5 +111,10 @@ class User extends Resource
     public function actions(Request $request)
     {
         return [];
+    }
+
+    public static function label()
+    {
+        return 'Penjualan';
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\GasStation;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,7 +23,8 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name'          => $this->faker->name,
+            'station_id'    => GasStation::factory()->create()->id,
         ];
     }
 }

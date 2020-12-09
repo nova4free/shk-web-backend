@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGasStationsTable extends Migration
+class CreateSellingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateGasStationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('gas_stations', function (Blueprint $table) {
+        Schema::create('sellings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable();
-            $table->string('name');
-            $table->string('no_station');
+            $table->foreignId('product_id');
+            $table->date('date');
+            $table->float('ltr');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateGasStationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gas_stations');
+        Schema::dropIfExists('sellings');
     }
 }

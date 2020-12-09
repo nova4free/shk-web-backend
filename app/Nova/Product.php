@@ -3,7 +3,9 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -46,6 +48,11 @@ class Product extends Resource
 
             Text::make(__('Name'), 'name')
                 ->rules('required', 'string'),
+
+            Number::make('Price', 'price')
+                ->rules('required','string'),
+
+            BelongsTo::make(__('Station'), 'station', GasStation::class),
         ];
     }
 
